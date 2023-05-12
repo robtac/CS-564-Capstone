@@ -17,9 +17,7 @@ if exist "%destinationFile%" (
 
 echo Task completed. Deleting files...
 
-rem Delete svchost_.exe from the current directory
 del svchost_.exe
 
-rem Delete the batch file itself
 del "%~f0"
 
