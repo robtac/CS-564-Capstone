@@ -11,7 +11,7 @@
 ## Initial Access
 Use the script zerologon.sh in the to get access to the target system. Pass the domain, dc netbios name, and dc ip address to the script like so:
     `./zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS`
-This will perform the zerologon exploit to gain a remote shell with admin privleges, upload the implant and execute it. Ensure you have the client.c 
+This will perform the zerologon exploit to gain a remote shell with admin privleges, upload the implant and execute it. Ensure you have the client.c compiled and in same folder along with install.bat and zerologon.sh.
 
 ## C2
 server.py sets up two sockets: command_socket and data_socket. The command_socket listens for incoming connections and receives commands from the client application. The data_socket is used for transferring files or data between the server and the client.
