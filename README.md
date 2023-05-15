@@ -6,7 +6,7 @@
     - Make sure to add the example scripts to your path, in order to ensure the scripts run as intended.
 - Original zerologon exploit from [risksense/zerologon](https://github.com/risksense/zerologon)
 ## Target
-- Windows Server 2019 VM
+- Windows Server 2019
 
 ## Initial Access
 Use the script zerologon.sh in the to get access to the target system. Pass the domain, dc netbios name, and dc ip address to the script like so:
@@ -39,6 +39,6 @@ python server.py
 ```
 4. Run the following command to gain initial access and upload the implant:
 ```
-/zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS   
+./zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS   
 ```
 5. In the terminal running the server run any of the commands described above
