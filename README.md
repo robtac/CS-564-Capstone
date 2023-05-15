@@ -33,6 +33,6 @@ The commands that can be sent to the implant are:
 2. Compile client.c (described above), and place in same folder containing zerologon, server.py, install.bat and zerologon.sh
 3. To start the server, in a separate terminal run:
     python server.py
-4. Run the following command to gain initial access and upload the implant
-    ./zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS`
+4. Run the following command to gain initial access and upload the implant:
+   ./zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS`
 5. In the terminal running the server run any of the commands described above
