@@ -34,6 +34,7 @@ Let's break down the compilation command and its options:
 - '-o svchosts.exe' specifies the output file name as svchosts.exe which will be hard for someone to recognize as an outside program. 
 
 By employing these compilation options, the resulting svchosts.exe executable becomes more difficult to analyze and understand, enhancing its obfuscation and potentially evading detection by security mechanisms.
+## File Descriptions
 ### client.c
 Client.c is should be compiled and named svchosts.exe and put in the same folder as the zerologon.sh when running it to successfully implant and run the executable. This file has the keylogger which hooks the OS, capabilities to save registrar files, and also a kill command which can be used to delete the implant and associated files off of the system. Here is the command used to compile client.c:
 ```bash
@@ -48,6 +49,11 @@ The commands that can be sent to the implant are:
 - save: saves the log file using the delays between TCP packets sent from the implant
 - regsave: saves the registrar files and compares them to previous saves to see if they have been modified
 - kill: ends the process and deletes the implant
+### install.bat
+Batch file which installs the implant in 'C:\Windows\System32' directory.
+
+### zerologon.sh
+Bash script which gets initial access, runs the psexec.py commands to upload the implant and run it, and downloads the SYSTEM, SAM, and SECURITY files
 
 ## Steps to run
 1. Adjust IP address in server.py and client.c to be correct for where you will be running your server.
