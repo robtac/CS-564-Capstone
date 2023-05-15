@@ -5,6 +5,7 @@
 - [impacket](https://github.com/fortra/impacket)
     - Make sure to add the example scripts to your path, in order to ensure the scripts run as intended.
 - Original zerologon exploit from [risksense/zerologon](https://github.com/risksense/zerologon)
+## Target
 - Windows Server 2019 VM
 
 ## Initial Access
@@ -26,3 +27,12 @@ The commands that can be sent to the implant are:
 - save: saves the log file using the delays between TCP packets sent from the implant
 - regsave: saves the registrar files and compares them to previous saves to see if they have been modified
 - kill: ends the process and deletes the implant
+
+## Steps to run
+1. Adjust IP address in server.py and client.c to be correct for where you will be running your server.
+2. Compile client.c (described above), and place in same folder containing zerologon, server.py, install.bat and zerologon.sh
+3. To start the server, in a separate terminal run:
+    python server.py
+4. Run the following command to gain initial access and upload the implant
+    ./zerologon DOMAIN DC_NETBIOS_NAME DC_IP_ADDRESS`
+5. In the terminal running the server run any of the commands described above
