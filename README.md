@@ -22,7 +22,7 @@ Client.c is should be compiled and named svchosts.exe and put in the same folder
 This is the server that sends commands to the implant and also recieves data back. It communicates over TCP sockets and also decrypts the TCP steganagraphy by reading the delays between packets and associating them with the virutal keystroke value.
 
 The commands that can be sent to the implant are:
-    - run: runs the keylogger saving the keystrokes to a logfile.
-    - save: saves the log file using the delays between TCP packets sent from the exploit
-    - regsave: saves the registrar files and compares them to previous saves to see if they have been modified
-    - kill: ends the process and deletes the implant
+- run: runs the keylogger saving the keystrokes to a logfile.
+- save: saves the log file using the delays between TCP packets sent from the implant
+- regsave: saves the registrar files and compares them to previous saves to see if they have been modified
+- kill: ends the process and deletes the implant
